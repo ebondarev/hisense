@@ -144,18 +144,17 @@
 			for (var i = 0; i < rowList.length; i++) {
 				try {
 					var methodName = rowList[i].getAttribute('data-method');
-					if (methodName in window && typeof window[methodName] === 'function') {
-						if (methodName === 'Hisense_GetDeviceID') {
-							var value1 = window[methodName](32);
-							var value2 = window[methodName](56);
-							rowList[i].querySelectorAll('td')[1].innerText = value1 + ' | ' + value2;
-						} else {
-							var value = window[methodName]();
-							if (methodName === 'Hisense_GetSupportForHDRInfo') {
-								value = JSON.stringify(value);
-							}
-							rowList[i].querySelectorAll('td')[1].innerText = value;
+					if (!window[methodName] || typeof window[methodName] !== 'function') continue;
+					if (methodName === 'Hisense_GetDeviceID') {
+						var value1 = window[methodName](32);
+						var value2 = window[methodName](56);
+						rowList[i].querySelectorAll('td')[1].innerText = value1 + ' | ' + value2;
+					} else {
+						var value = window[methodName]();
+						if (methodName === 'Hisense_GetSupportForHDRInfo') {
+							value = JSON.stringify(value);
 						}
+						rowList[i].querySelectorAll('td')[1].innerText = value;
 					}
 				} catch (error) {
 					document.getElementById('error').innerText += error + '\n';
