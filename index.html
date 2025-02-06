@@ -138,28 +138,27 @@
     </table>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        var tableElement = document.querySelector("table");
-        var rowList = tableElement.querySelectorAll("tr[data-method]");
+      document.addEventListener('DOMContentLoaded', function () {
+        var tableElement = document.querySelector('table');
+        var rowList = tableElement.querySelectorAll('tr[data-method]');
         for (var i = 0; i < rowList.length; i++) {
           try {
-            var methodName = rowList[i].getAttribute("data-method");
-            if (
-              methodName in window &&
-              typeof window[methodName] === "function"
-            ) {
-              if (methodName === "Hisense_GetDeviceID") {
+            var methodName = rowList[i].getAttribute('data-method');
+            if (methodName in window && typeof window[methodName] === 'function') {
+              if (methodName === 'Hisense_GetDeviceID') {
                 var value1 = window[methodName](32);
                 var value2 = window[methodName](56);
-                rowList.querySelector("td:nth-child(2)").innerText =
-                  value1 + " | " + value2;
+                rowList[i].querySelectorAll('td')[1].innerText = value1 + ' | ' + value2;
               } else {
                 var value = window[methodName]();
-                rowList.querySelector("td:nth-child(2)").innerText = value;
+                if (methodName === 'Hisense_GetSupportForHDRInfo') {
+                  value = JSON.stringify(value);
+                }
+                rowList[i].querySelectorAll('td')[1].innerText = value;
               }
             }
           } catch (error) {
-            document.getElementById("error").innerText += error + "\n";
+            document.getElementById('error').innerText += error + '\n';
           }
         }
       });
